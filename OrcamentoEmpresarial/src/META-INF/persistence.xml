@@ -15,7 +15,7 @@
 
 			<property name="javax.persistence.jdbc.url"
 
-				value="jdbc:mysql://localhost:3306/ExemploJPA?zeroDateTimeBehavior=convertToNull" />
+				value="jdbc:mysql://localhost:3306/Orcamento?zeroDateTimeBehavior=convertToNull" />
 
 			<property name="javax.persistence.jdbc.password" value="1234" />
 
