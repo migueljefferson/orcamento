@@ -1,0 +1,5 @@
+create schema orcamento;
+
+login - root
+senha - 1234
+
