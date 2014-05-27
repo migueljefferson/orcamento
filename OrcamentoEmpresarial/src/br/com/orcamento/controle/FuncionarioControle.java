@@ -1,98 +1,98 @@
 package br.com.orcamento.controle;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.io.IOException;
 
-import javax.annotation.ManagedBean;
-import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.orcamento.jdbc.dao.FuncionarioDAO;
 import br.com.orcamento.modelo.Funcionario;
 
-@ManagedBean
-public class FuncionarioControle {
+/**
+ * Servlet implementation class FuncionarioControle
+ */
+//@WebServlet("/FuncionarioControle")
+public class FuncionarioControle extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
+	private static String INSERT_OR_EDIT = "/editaFuncionario.jsp";
+    private static String LIST_USER = "/listaFuncionario.jsp";
+    private FuncionarioDAO dao;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public FuncionarioControle() {
+        super();
+        // TODO Auto-generated constructor stub
+        dao = new FuncionarioDAO();
+    }
 
-	@EJB
-	FuncionarioDAO funcionarioDao = new FuncionarioDAO();
-	Funcionario funcionarioSelec;
-	boolean modoInsert;
-	List<Funcionario> funcionarios;
-
-	// chmado para popular a tabela
-	@PostConstruct
-	public void iniciarTabela() {
-		funcionarios = null;
-		funcionarios = (ArrayList<Funcionario>) funcionarioDao.getBeans();
-		Collections.sort(funcionarios, new ComparaFuncionario());
-		setModoInsert(false);
-
-	}
-
-	public Funcionario getFuncionarioSelec() {
-		return funcionarioSelec;
-	}
-
-	public void setFuncionarioSelec(Funcionario funcionarioSelec) {
-		this.funcionarioSelec = funcionarioSelec;
-	}
-
-	public boolean getModoInsert() {
-		return modoInsert;
-	}
-
-	public void setModoInsert(boolean modoInsert) {
-		this.modoInsert = modoInsert;
-	}
-
-	public List<Funcionario> getFuncionarios() {
-		return funcionarios;
-	}
-
-	public void setFuncionarios(List<Funcionario> funcionarios) {
-		this.funcionarios = funcionarios;
-	}
-
-	public String cadastrar() {
-		funcionarioSelec = new Funcionario();
-		setModoInsert(true);
-		return "manterFuncionarioForm";
-	}
-
-	public String editar() {
-		setModoInsert(false);
-		System.out.print("editando " + funcionarioSelec.getNome());
-		return "manterFuncionarioForm";
-	}
-
-	public String remover() {
-		Funcionario f = funcionarioDao.getBean(getFuncionarioSelec().getId());
-		funcionarioSelec = null;
-		funcionarioDao.remover(f);
-		iniciarTabela();
-		return "";
-	}
-
-	public String salvar() {
-		System.out.print("salvando " + funcionarioSelec.getNome());
-		funcionarioDao.atualizar(getFuncionarioSelec());
-		iniciarTabela();// nova entidade foi inserida; refazer a tabela
-		return "manterFuncionarioList";
-	}
-
-	public String atualizar() {
-		System.out.print("atual  " + funcionarioSelec.getNome());
-		funcionarioDao.atualizar(getFuncionarioSelec());
-		return "manterFuncionarioList";
-	}
-
-	public class ComparaFuncionario implements Comparator<Funcionario> {
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		
-		public int compare(Funcionario func1, Funcionario func2) {
-			return func1.getNome().compareTo(func2.getNome());
-		}
+		String forward="";
+        String action = request.getParameter("action");
+        
+        if (action==null) {
+        	action="lista";
+        }
+
+        if (action.equalsIgnoreCase("remove")){
+            int userId = Integer.parseInt(request.getParameter("Id"));
+            Funcionario funcionario = new Funcionario();
+    		funcionario.setId(userId);
+            dao.remove(funcionario);
+            forward = LIST_USER;
+            request.setAttribute("funcionarios", dao.getLista());    
+        } else if (action.equalsIgnoreCase("edita")){
+            forward = INSERT_OR_EDIT;
+            int userId = Integer.parseInt(request.getParameter("Id"));
+            Funcionario funcionario = dao.getFuncionarioById(userId);
+            request.setAttribute("funcionario", funcionario);
+        } else if (action.equalsIgnoreCase("lista")){
+            forward = LIST_USER;
+            request.setAttribute("funcionarios", dao.getLista());
+        } else {
+            forward = INSERT_OR_EDIT;
+        }
+
+        RequestDispatcher view = request.getRequestDispatcher(forward);
+        view.forward(request, response);
 	}
 
-}
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	        Funcionario funcionario = new Funcionario();
+	        funcionario.setNome(request.getParameter("nome"));
+	        funcionario.setEndereco(request.getParameter("endereco"));
+	        funcionario.setEmail(request.getParameter("email"));
+	        funcionario.setDepartamentos_id(request.getParameter("departamentos_id"));
+	        funcionario.setSenha(request.getParameter("senha"));;
+	        String id = request.getParameter("id");
+	        if(id == null || id.isEmpty())
+	        {
+	            dao.adiciona(funcionario);
+	        }
+	        else
+	        {
+	            funcionario.setId(Integer.parseInt(id));
+	            dao.altera(funcionario);
+	        }
+	        RequestDispatcher view = request.getRequestDispatcher(LIST_USER);
+	        request.setAttribute("funcionarios", dao.getLista());
+	        view.forward(request, response);
+	    }
+		
+	}
+

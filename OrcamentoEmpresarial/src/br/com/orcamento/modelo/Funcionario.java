@@ -1,42 +1,28 @@
+// Bean para o funcionário
+
 package br.com.orcamento.modelo;
 
-import java.util.Calendar;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "funcionario")
 public class Funcionario {
-
-	@Id
-	@GeneratedValue
-	private Long id;
-	@Column(name = "nome", length = 45)
+	private int id;
 	private String nome;
-	@Column(name = "logradouro", length = 45)
-	private String logradouro;
-	@Column(name = "numero", length = 4)
-	private int numero;
-	@Column(name = "bairro", length = 20)
-	private String bairro;
-	@Column(name = "cidade", length = 20)
-	private String cidade;
-	@Column(name = "Estado", length = 2)
-	private String estado;
-	@Column(name = "data_nascimento")
-	private Calendar dataNascimento;
-	@Column(name = "departamento")
-	private Long departamento;
+	private String email;
+	private String endereco;
+	private int departamentos_id;
+	private String senha;
+	
+	public String getEmail() {
+		return email;
+	}
 
-	public Long getId() {
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -48,60 +34,32 @@ public class Funcionario {
 		this.nome = nome;
 	}
 
-	public String getLogradouro() {
-		return logradouro;
+	public String getEndereco() {
+		return endereco;
 	}
 
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
-	public int getNumero() {
-		return numero;
+	public int getDepartamentos_id() {
+		return departamentos_id;
 	}
 
-	public void setNumero(int numero) {
-		this.numero = numero;
+	public void setDepartamentos_id(int departamentos_id) {
+		this.departamentos_id = departamentos_id;
 	}
 
-	public String getBairro() {
-		return bairro;
+	public void setDepartamentos_id(String departamentos_id) {
+		// TODO Auto-generated method stub
+		this.departamentos_id = Integer.parseInt(departamentos_id);
 	}
 
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
+	public String getSenha() {
+		return senha;
 	}
 
-	public String getCidade() {
-		return cidade;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
-
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Calendar getDataNascimento() {
-		return dataNascimento;
-	}
-
-	public void setDataNascimento(Calendar calendar) {
-		this.dataNascimento = calendar;
-	}
-
-	public Long getDepartamento() {
-		return departamento;
-	}
-
-	public void setDepartamento(Long departamento) {
-		this.departamento = departamento;
-	}
-
 }
