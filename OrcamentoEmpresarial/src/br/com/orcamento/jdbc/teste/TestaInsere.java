@@ -1,6 +1,6 @@
 package br.com.orcamento.jdbc.teste;
 
-import br.com.orcamento.jdbc.dao.FuncionarioDAO;
+import br.com.orcamento.jdbc.dao.FuncionarioDao;
 import br.com.orcamento.modelo.Funcionario;
 
 public class TestaInsere {
@@ -12,11 +12,11 @@ public class TestaInsere {
 		
 		contato.setNome("Florencio");
 		contato.setEmail("florencioq@gmail.com");
-		contato.setEndereco("Rua Paula Ney, 700");
+		contato.setLogradouro("Rua Paula Ney, 700");
 		contato.setDepartamentos_id(0);
 		contato.setSenha("123");
 		
-		FuncionarioDAO dao = new FuncionarioDAO();
+		FuncionarioDao dao = new FuncionarioDao();
 		dao.adiciona(contato);
 		
 		System.out.println("Gravado!");

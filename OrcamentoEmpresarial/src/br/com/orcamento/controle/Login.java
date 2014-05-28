@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.orcamento.jdbc.dao.FuncionarioDAO;
+import br.com.orcamento.jdbc.dao.FuncionarioDao;
 import br.com.orcamento.modelo.Funcionario;
 
 /**
@@ -53,7 +53,7 @@ public class Login extends HttpServlet {
 		String email = request.getParameter("email");
 		String senha = request.getParameter("senha");
 		PrintWriter writer = response.getWriter();
-		Funcionario funcionario = new FuncionarioDAO()
+		Funcionario funcionario = new FuncionarioDao()
 				.getFuncionarioByEmailSenha(email, senha);
 		if (funcionario.getEmail() == null) {
 			writer.println("<html><body>Usu�rio Inv�lido</body><html>");
